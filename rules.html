@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rules | Smart Buildings Competition 2026</title>
+<meta name="description" content="Competition rules for fairness, accessibility, and scientific integrity.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400..600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<section class="page-hero section--ink">
+  <div class="wrap">
+    <p class="eyebrow">Rules</p>
+    <h1>Eligibility, submission, and judging</h1>
+    <p class="lede">The challenge runs under the following rules, intended to ensure fairness, accessibility, and scientific integrity.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap" style="max-width:900px">
+    <ol class="rules">
+      <li class="reveal"><h3>Participant eligibility</h3><p>Each participant and team member must (a) be an individual or a group of no more than 4; (b) have internet access, an email account, and a personal computer; and (c) have no conflict of interest with the organizing team.</p></li>
+
+      <li class="reveal"><h3>Entry eligibility</h3><p>To be prize-eligible, the entry must (a) be in English, compatible with the submission format, and the team's own original work; (b) not have been submitted previously in any promotion; and (c) not include illegal, infringing, or otherwise prohibited content.</p></li>
+
+      <li class="reveal"><h3>Registration &amp; submission requirements</h3><p>The participant or team must:</p>
+        <ol type="a">
+          <li>create a Kaggle account and register via the competition webpage;</li>
+          <li>submit the <code>Transfer_policy</code> class, model weights, a <code>.zip</code> code archive with seeds, and a dependency manifest;</li>
+          <li>hold all required consents and licenses and ensure all team members agree to these rules;</li>
+          <li>not violate these rules, the organizers' Terms of Service, or Privacy Policy;</li>
+          <li>not engage in fraudulent acts or tamper with the evaluation sandbox or held-out building set.</li>
+        </ol>
+      </li>
+
+      <li class="reveal"><h3>Disqualification</h3><p>A participant or team may be disqualified for (a) ineligibility or violation of items 1 and 2; (b) creating multiple accounts; (c) submitting non-reproducible code archives; or (d) submitting code with hard-coded references to held-out building configurations or weather seeds.</p></li>
+
+      <li class="reveal"><h3>Winner selection</h3><p>Entries are judged via the regret-based reward and ranked on the Kaggle leaderboard; the <b>private leaderboard</b> determines winner selection.</p>
+        <ol type="a">
+          <li>Ten held-out buildings are evaluated under all six weather configurations with N rollouts per pair (exact parameters announced after acceptance).</li>
+          <li>Roughly half the pairs form the public leaderboard; the rest form the undisclosed private leaderboard used for final scoring.</li>
+          <li>A team's score is the mean episodic return across rollouts, with ties broken by submission timestamp.</li>
+          <li>The 10 published training environments are the official training set, but participants may additionally use any synthetic data not derived from the held-out set.</li>
+        </ol>
+      </li>
+
+      <li class="reveal"><h3>Resource constraints</h3><p>To keep the competition accessible to less-resourced teams: each rollout must complete within <b>10&times;</b> the bang-bang baseline runtime on the standardized evaluation hardware; model artifacts are capped at <b>4&nbsp;GB</b> per submission; and submissions must run on a <b>single GPU (RTX 4090 or smaller)</b> without distributed inference.</p></li>
+
+      <li class="reveal"><h3>Communications &amp; updates</h3><p>Participants may reach the organizers via the Kaggle Discussion board and the dedicated organizers' email listed on this website. Updates to rules, deadlines, and clarifications are posted on the Kaggle competition page and announced on the discussion board.</p></li>
+
+      <li class="reveal"><h3>Inclusivity</h3><p>Open globally to individuals and teams (up to 4 members) from academia, industry, or independent backgrounds. No prior expertise in HVAC or building science is required, and all necessary tools and documentation are provided. Subject to applicable laws; some regions may be restricted by Kaggle's platform Terms of Service.</p></li>
+    </ol>
+  </div>
+</section>
+
+<script src="assets/js/site.js"></script>
+</body>
+</html>

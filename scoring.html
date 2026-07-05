@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Scoring | Smart Buildings Competition 2026</title>
+<meta name="description" content="The per-scenario normalized scoring metric used to rank submissions.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400..600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+<script>
+  window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['$$','$$']] }, svg: { fontCache: 'global' } };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+</head>
+<body>
+
+<section class="page-hero section--ink">
+  <div class="wrap">
+    <p class="eyebrow">Scoring</p>
+    <h1 class="big">Evaluation and scoring</h1>
+    <p class="lede">Policies are ranked by their mean per-scenario normalized score. This page explains the metric behind the standings.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <h2>Per-scenario normalized score</h2>
+      <p class="lede">Each scenario is normalized against a fixed baseline set, then averaged with equal weight over all scenarios.</p>
+    </div>
+
+    <div class="eq reveal">
+      $$ \text{score} = \frac{r - r_{\text{worst}}}{r_{\text{best}} - r_{\text{worst}}} $$
+      <div class="eq__note">r: the policy's episodic return on a scenario. r_best, r_worst: best and worst returns of the fixed baselines on that same scenario.</div>
+    </div>
+
+    <div class="grid grid--2" style="align-items:start;gap:30px">
+      <div class="prose reveal">
+        <p>The overall score is the average normalized score over all training scenarios: <b>10 public buildings &times; 6 weather scenarios = 60 development environments</b>. A score of <b>1.0</b> means the policy matches the best baseline everywhere; <b>above 1.0</b> means it beats every baseline.</p>
+        <p>Final evaluation runs on the held-out set: <b>10 buildings &times; 6 weather scenarios &times; 3 rollouts = 180 scored trajectories</b>. The code supports unlimited scenario generation, so participants can sample arbitrarily many additional buildings during development, while the held-out evaluation buildings stay completely unseen.</p>
+      </div>
+      <div class="prose reveal">
+        <p>Each score is reported with a <b>bootstrapped 95% confidence interval</b> that quantifies how much the mean would move under stochastic occupancy and weather. Two policies are treated as significantly different only when their intervals are disjoint, which guards against reading a ranking gap that is within noise.</p>
+        <p>Grouping by weather or building is deliberately avoided: any grouping imposes an arbitrary weighting and hides within-group variance. On a common 0 to 1 scale, a flat equal-weight mean is the cleanest choice, so each building and weather pair counts exactly once. A raw mean of returns is avoided because scale would dominate it: winter scenarios swing by tens of reward units while temperate ones swing by a few.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section section--paper2">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow">At a glance</p>
+      <h2>Development vs. evaluation</h2>
+    </div>
+    <div class="grid grid--3 reveal">
+      <div class="tile"><span class="tile__tag"></span>
+        <div class="stat__num" style="font-family:var(--ff-display);font-size:2rem;color:var(--slate)">60</div>
+        <h3 style="margin-top:8px">Development environments</h3>
+        <p>10 public buildings &times; 6 weather scenarios, used to build and validate policies.</p>
+      </div>
+      <div class="tile"><span class="tile__tag"></span>
+        <div class="stat__num" style="font-family:var(--ff-display);font-size:2rem;color:var(--slate)">180</div>
+        <h3 style="margin-top:8px">Evaluation trajectories</h3>
+        <p>10 held-out buildings &times; 6 weather scenarios &times; 3 rollouts, completely unseen during development.</p>
+      </div>
+      <div class="tile"><span class="tile__tag"></span>
+        <div class="stat__num" style="font-family:var(--ff-display);font-size:2rem;color:var(--slate)">1.0</div>
+        <h3 style="margin-top:8px">Baseline parity</h3>
+        <p>A score of 1.0 matches the best baseline on every scenario; above 1.0 beats all baselines.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script src="assets/js/site.js"></script>
+</body>
+</html>

@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Competition Description | Smart Buildings Competition 2026</title>
+<meta name="description" content="Overview, building components, observation and action spaces, and the reward function.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400..600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+<script>
+  window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['$$','$$']] }, svg: { fontCache: 'global' } };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+</head>
+<body>
+
+<section class="page-hero section--ink">
+  <div class="wrap">
+    <p class="eyebrow">Competition description</p>
+    <h1>Towards Foundation-Style Learning for Generalizable HVAC Control</h1>
+    <p class="lede">One policy, operating the HVAC systems of commercial buildings across a range of layouts and weather, jointly minimizing energy cost and carbon while keeping occupants comfortable.</p>
+  </div>
+</section>
+
+<nav class="subnav" aria-label="Sections">
+  <div class="wrap"><div class="subnav__inner">
+    <a href="#overview" class="active">Overview</a>
+    <a href="#components">Building components</a>
+    <a href="#spaces">Observation &amp; action spaces</a>
+    <a href="#reward">Reward function</a>
+  </div></div>
+</nav>
+
+<div class="wrap">
+
+<!-- OVERVIEW -->
+<section id="overview" class="section" style="padding-top:8px">
+  <div class="prose reveal">
+    <p class="eyebrow">Overview</p>
+    <h2>Learn one policy, not one controller</h2>
+    <p>Participants develop a single control policy that operates the HVAC systems of commercial buildings across a range of layouts and weather conditions. The policy decides when to run each air handler and the hot-water pump, and sets their temperature and pressure setpoints, to jointly minimize energy cost and carbon emissions while maintaining occupant comfort.</p>
+    <p>The objective is deliberately <em>not</em> to tune a controller for one building. It is to learn one policy that generalizes across arbitrary floor plans, HVAC topologies, and weather. The same policy is deployed, unchanged, on buildings it has never encountered, differing in number of floors, geometry, room layout, zoning, equipment count, and climate. The policy must infer an effective strategy from the building description and live sensor stream it is given at runtime.</p>
+    <p>This portability across the entire distribution of buildings, rather than competence on a single instance, is the defining requirement of a building foundation model and the central scientific challenge of the competition.</p>
+  </div>
+
+  <div class="callout reveal">
+    <p style="margin:0 0 6px"><b>At each control step</b>, a five-minute interval over a one-day episode, the policy observes the building state and must simultaneously issue:</p>
+    <div class="prose"><ul style="margin-bottom:0">
+      <li><b>Discrete actions:</b> an on/off command for each Air Handler Unit (AHU) and for the central Hot Water System (HWS), determining which equipment is actively conditioning the building.</li>
+      <li><b>Continuous setpoints:</b> for each AHU, the supply-air temperature and duct static pressure; for the HWS, the boiler supply-water temperature and pump differential pressure.</li>
+    </ul></div>
+  </div>
+
+  <div class="prose reveal">
+    <p>Because the number of AHUs and zones differs from building to building, both the observation and action vectors change shape per building, and there is no fixed input or output mapping the policy can memorize. This hybrid, variable-dimensional action space, combined with the requirement to generalize to unseen buildings, makes the problem substantially harder than standard fixed-dimension RL benchmarks.</p>
+  </div>
+</section>
+
+<hr class="spectrum-rule" style="opacity:.4">
+
+<!-- BUILDING COMPONENTS -->
+<section id="components" class="section">
+  <div class="section-head reveal">
+    <p class="eyebrow">Building components</p>
+    <h2>A coupled dynamical system</h2>
+    <p class="lede">Changing one AHU's setpoint affects multiple zones; occupancy in one zone shifts the thermal load across the building.</p>
+  </div>
+
+  <div class="parts reveal">
+    <div class="part"><span class="part__k">AHU</span><div><h3>Air Handler Units</h3><p>Central systems that heat and cool air and distribute it via ducts. A building may have 3 to 8 AHUs serving different zones.</p></div></div>
+    <div class="part"><span class="part__k">VAV</span><div><h3>VAV Boxes</h3><p>Terminal units in each zone that modulate airflow and mix conditioned air with recirculated room air, balancing comfort without running an AHU at full capacity.</p></div></div>
+    <div class="part"><span class="part__k">HWS</span><div><h3>Hot Water System</h3><p>A central boiler and pump supplying heated water to AHU coils and zone terminals. The policy sets boiler setpoint and pump pressure to regulate heating capacity.</p></div></div>
+    <div class="part"><span class="part__k">Zone</span><div><h3>Zones</h3><p>Individual rooms with independent temperature sensors and occupancy schedules. A building may contain 5 to 50 zones depending on size and layout.</p></div></div>
+  </div>
+
+  <figure class="fig fig--pad reveal">
+    <img src="assets/images/device_locations.png" alt="A commercial office building with its principal HVAC devices: chiller, air handler, boilers, and meters.">
+    <figcaption><b>Figure 1.</b> The principal HVAC devices in a commercial building. Chillers and air handlers condition and distribute air, the boiler and hot-water system provide heating, and meters record the energy and carbon that the reward penalizes. The competition policy actuates this equipment through discrete on/off commands and continuous setpoints.</figcaption>
+  </figure>
+
+  <div class="prose reveal">
+    <p>Buildings differ not only in equipment counts but in how equipment maps to physical space. Each AHU serves a distinct group of rooms, and this mapping is unique to every building.</p>
+  </div>
+
+  <div class="grid grid--2 reveal" style="align-items:start;gap:26px">
+    <figure class="fig fig--pad" style="margin:14px 0">
+      <img src="assets/images/building_0000_layout.png" alt="Floor plan of building_0000 across three floors, colored by the AHU serving each room.">
+      <figcaption><b>Figure 2.</b> AHU-to-zone mapping for development building_0000: three floors, 37 rooms, 5 AHUs (serving 9, 9, 3, 7, and 9 rooms). Both the number of AHUs and the rooms each serves vary from building to building.</figcaption>
+    </figure>
+    <figure class="fig fig--pad" style="margin:14px 0">
+      <img src="assets/images/floorplan_variability.png" alt="Three example generated buildings varying in footprint, floor count, and AHU grouping.">
+      <figcaption><b>Figure 3.</b> Example buildings of varying shape and HVAC system. Left: building_0005, four floors, six AHUs. Right, top to bottom: building_0008 (two floors, four AHUs) and building_0000 (three floors, five AHUs). Footprint, floor count, zone count, and AHU grouping all vary across generated buildings.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<hr class="spectrum-rule" style="opacity:.4">
+
+<!-- OBSERVATION & ACTION SPACES -->
+<section id="spaces" class="section">
+  <div class="section-head reveal">
+    <p class="eyebrow">Observation &amp; action spaces</p>
+    <h2>Building-specific by design</h2>
+    <p class="lede">Both spaces are determined by the floor plan, chiefly the number of zones and AHUs, and are not fixed across the competition.</p>
+  </div>
+
+  <div class="grid grid--2" style="align-items:start;gap:26px">
+    <div class="prose reveal">
+      <h3 style="margin-top:0">State (observation)</h3>
+      <p>Each observation's length scales with the building (it grows with zones and air handlers). It encodes:</p>
+      <ul>
+        <li><b>Per zone:</b> air temperature, current heating and cooling setpoints, supply-air damper position, airflow setpoint.</li>
+        <li><b>Per AHU:</b> supply-air temperature, static pressure, and airflow (sensed and setpoint), a cooling-request count, and supply/exhaust fan run status.</li>
+        <li><b>Hot-water system:</b> supply-water temperature (sensed and setpoint).</li>
+        <li><b>Occupancy &amp; schedule:</b> building-level occupancy count, plus comfort-mode flags for now and imminently.</li>
+        <li><b>Weather:</b> outside-air temperature.</li>
+        <li><b>Time:</b> time of day and day of week (cyclically encoded).</li>
+      </ul>
+      <p>Optionally, the policy may also consume the static floor plan and the AHU-to-zone mapping, supplied through the building metadata at runtime.</p>
+    </div>
+    <div class="prose reveal">
+      <h3 style="margin-top:0">Action space</h3>
+      <p>The action is a hybrid, variable-dimensional dictionary. For a building with <b>K</b> AHUs:</p>
+      <ul>
+        <li>the <b>discrete</b> component has shape <code>(K+1)</code>, one on/off bit per AHU plus the Hot Water System;</li>
+        <li>the <b>continuous</b> component has shape <code>(2K+2)</code>, two setpoints per AHU plus two for the HWS, each normalized to \([-1, 1]\).</li>
+      </ul>
+      <p>These vary widely because the generator samples a broad configuration space: 2 to 4 floors; a 400 to 700 ft &times; 300 to 500 ft footprint; composite layouts; 30 to 60 ft rooms; 3 to 8 AHUs; and 1 to 2 occupants per zone. With 5 to 50 resulting zones, the discrete space spans <b>4 to 9 bits</b> and the continuous space <b>8 to 18 values</b>.</p>
+      <div class="callout" style="margin-top:8px"><p style="margin:0">Development building_0000 (Figure 2), with 5 AHUs and 37 rooms, has a <b>6-bit</b> discrete action space and a <b>12-value</b> continuous action space.</p></div>
+    </div>
+  </div>
+</section>
+
+<hr class="spectrum-rule" style="opacity:.4">
+
+<!-- REWARD -->
+<section id="reward" class="section">
+  <div class="section-head reveal">
+    <p class="eyebrow">Reward function</p>
+    <h2>A regret-based, three-way tradeoff</h2>
+    <p class="lede">At each step the policy receives a reward combining three competing, normalized quantities.</p>
+  </div>
+
+  <div class="eq reveal">
+    $$ r_t = \alpha_{\text{comfort}}\,\delta_t \;-\; \alpha_{\text{energy}}\,c_t \;-\; \alpha_{\text{carbon}}\,e_t $$
+    <div class="eq__note">δₜ: normalized productivity regret (comfort), in [−1, 0]. cₜ, eₜ: energy cost and carbon, each in [0, 1].</div>
+  </div>
+
+  <div class="prose reveal">
+    <p>The comfort term \(\delta_t\) equals 0 when occupied zones are perfectly comfortable and approaches −1 as comfort degrades, so higher is better. Energy cost \(c_t\) and carbon \(e_t\) enter as costs. The organizer-fixed weights are identical for every submission and sum to one, making the reward a weighted average:</p>
+  </div>
+
+  <div class="weights reveal">
+    <div class="weights__bar">
+      <div class="weights__seg w-comfort">0.6 <small>comfort</small></div>
+      <div class="weights__seg w-energy">0.2 <small>energy</small></div>
+      <div class="weights__seg w-carbon">0.2 <small>carbon</small></div>
+    </div>
+  </div>
+
+  <div class="prose reveal">
+    <p>This makes comfort dominant while still charging materially for energy and carbon, and it creates the central tradeoff. Conditioning aggressively keeps comfort near its best value but drives energy and carbon high; switching equipment off eliminates energy and carbon but pushes comfort toward −1 whenever zones are occupied. Because comfort is scored only in <em>occupied</em> zones, the reward favors forward-looking, occupancy-aware control: precondition spaces before people arrive, then relax toward an energy-saving band once they leave.</p>
+  </div>
+
+  <figure class="fig reveal">
+    <img src="assets/images/overview.png" alt="A policy rollout showing zone temperatures, per-step and cumulative reward, and occupancy over day and night cycles.">
+    <figcaption><b>Figure 4.</b> A rollout of one policy over successive day and night cycles. Top: per-zone temperatures against the daytime comfort band (green) and the relaxed night-time eco band (blue), with outside-air temperature. Middle: per-step reward and its cumulative total. Bottom: occupancy. Comfort is scored only against the currently active band, so deviations are penalized during occupied hours but may drift within the wider eco band at night. Reward dips coincide with the largest comfort violations and periods of high consumption.</figcaption>
+  </figure>
+</section>
+
+</div>
+
+<script src="assets/js/site.js"></script>
+</body>
+</html>
