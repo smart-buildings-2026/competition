@@ -184,6 +184,20 @@ p { margin: 0 0 1.05em; }
 .btn--ghost:hover { background: rgba(255,255,255,.08); }
 .btn--dark { background: var(--navy); color: #fff; }
 .btn--dark:hover { background: var(--slate); }
+
+/* Coming-soon (placeholder) states, used until the Kaggle page is live.
+   Same amber look as the live buttons, just non-clickable. */
+.btn--soon {
+  background: var(--warm); color: #29180a; border-color: transparent;
+  box-shadow: 0 6px 18px rgba(244,169,75,.35); cursor: default;
+}
+.btn--soon:hover { transform: none; background: var(--warm); }
+.nav__soon {
+  margin-left: 6px; display: inline-block; padding: 8px 16px; border-radius: 8px;
+  font-weight: 600; font-size: .92rem; color: #29180a; background: var(--warm);
+  white-space: nowrap; cursor: default;
+}
+.footer-soon { color: var(--on-dark-dim); opacity: .7; display: block; padding: 4px 0; font-size: .92rem; }
 .btn__arrow { transition: transform .18s; }
 .btn:hover .btn__arrow { transform: translateX(3px); }
 

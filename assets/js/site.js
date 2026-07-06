@@ -7,7 +7,9 @@
 (function () {
   "use strict";
 
-  // Kaggle competition URL: update once here when the page goes live.
+  // Kaggle competition URL. Currently the site shows "coming soon" placeholders
+  // instead of live links. When the Kaggle page exists, set this and swap the
+  // nav pill / footer text (and the hero + submission buttons) back to links.
   var KAGGLE_URL = "https://www.kaggle.com/";
 
   var PAGES = [
@@ -42,7 +44,7 @@
           "<small>NeurIPS 2026 &middot; Competition Track</small></span></a>" +
       '<button class="nav__toggle" aria-label="Toggle menu" aria-expanded="false"><span></span></button>' +
       '<div class="nav__links">' + links +
-        '<a class="nav__cta" href="' + KAGGLE_URL + '" target="_blank" rel="noopener">Join on Kaggle</a>' +
+        '<span class="nav__soon">Kaggle &middot; coming soon</span>' +
       "</div>" +
     "</nav></div></header>";
 
@@ -59,7 +61,7 @@
         '<div><h4>Contact</h4>' +
           '<a href="mailto:jag2396@columbia.edu">Judah Goldfeder &middot; Columbia</a>' +
           '<a href="mailto:ayush_rai@seas.harvard.edu">Ayush Rai &middot; Harvard</a>' +
-          '<a href="' + KAGGLE_URL + '" target="_blank" rel="noopener">Kaggle discussion board</a>' +
+          '<span class="footer-soon">Kaggle discussion board (coming soon)</span>' +
         "</div>" +
       "</div>" +
       '<hr class="spectrum-rule" style="opacity:.5;margin-bottom:22px">' +
