@@ -44,7 +44,7 @@
           "<small>NeurIPS 2026 &middot; Competition Track</small></span></a>" +
       '<button class="nav__toggle" aria-label="Toggle menu" aria-expanded="false"><span></span></button>' +
       '<div class="nav__links">' + links +
-        '<span class="nav__soon">Kaggle &middot; coming soon</span>' +
+        '<span class="nav__soon">Join on Kaggle &middot; Coming soon</span>' +
       "</div>" +
     "</nav></div></header>";
 
@@ -63,6 +63,10 @@
           '<a href="mailto:ayush_rai@seas.harvard.edu">Ayush Rai &middot; Harvard</a>' +
           '<span class="footer-soon">Kaggle discussion board (coming soon)</span>' +
         "</div>" +
+      "</div>" +
+      '<div class="footer-sponsor">' +
+        '<span class="footer-sponsor__label">Sponsored by</span>' +
+        '<a class="sponsor-chip" href="https://www.kajima.co.jp/english/" target="_blank" rel="noopener"><img src="assets/images/kajima.png" alt="Kajima Corporation"></a>' +
       "</div>" +
       '<hr class="spectrum-rule" style="opacity:.5;margin-bottom:22px">' +
       '<div class="footer-bar">' +
