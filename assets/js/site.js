@@ -44,7 +44,6 @@
           "<small>NeurIPS 2026 &middot; Competition Track</small></span></a>" +
       '<button class="nav__toggle" aria-label="Toggle menu" aria-expanded="false"><span></span></button>' +
       '<div class="nav__links">' + links +
-        '<span class="nav__soon">Join on Kaggle &middot; Coming soon</span>' +
       "</div>" +
     "</nav></div></header>";
 
@@ -61,7 +60,6 @@
         '<div><h4>Contact</h4>' +
           '<a href="mailto:jag2396@columbia.edu">Judah Goldfeder &middot; Columbia</a>' +
           '<a href="mailto:ayush_rai@seas.harvard.edu">Ayush Rai &middot; Harvard</a>' +
-          '<span class="footer-soon">Kaggle discussion board (coming soon)</span>' +
         "</div>" +
       "</div>" +
       '<div class="footer-sponsor">' +

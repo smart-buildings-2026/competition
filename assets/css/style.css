@@ -527,7 +527,7 @@ table.lb tbody tr:hover { background: var(--paper); }
   .stat:nth-child(1), .stat:nth-child(2) { border-bottom: 1px solid rgba(255,255,255,.08); }
   .stat:nth-child(3) { border-left: 0; }
 }
-@media (max-width: 1200px) {
+@media (max-width: 940px) {
   .nav__links {
     position: absolute; top: 68px; left: 0; right: 0; flex-direction: column; align-items: stretch;
     background: var(--ink); padding: 14px 20px 20px; gap: 2px;
