@@ -38,8 +38,8 @@
 
     <div class="grid grid--2" style="align-items:start;gap:30px">
       <div class="prose reveal">
-        <p>The overall score is the average normalized score over all training scenarios: <b>10 public buildings &times; 6 weather scenarios = 60 development environments</b>. A score of <b>1.0</b> means the policy matches the best baseline everywhere; <b>above 1.0</b> means it beats every baseline.</p>
-        <p>Final evaluation runs on the held-out set: <b>10 buildings &times; 6 weather scenarios &times; 3 rollouts = 180 scored trajectories</b>. The code supports unlimited scenario generation, so participants can sample arbitrarily many additional buildings during development, while the held-out evaluation buildings stay completely unseen.</p>
+        <p>The overall score is the average normalized score over all training scenarios: <b>8 public buildings &times; 6 weather stations = 48 development scenarios</b>. A score of <b>1.0</b> means the policy matches the best baseline everywhere; <b>above 1.0</b> means it beats every baseline.</p>
+        <p>Final evaluation runs on the held-out set: <b>10 buildings &times; 6 weather stations &times; 3 rollouts = 180 scored trajectories</b>. The code supports unlimited scenario generation, so participants can sample arbitrarily many additional buildings during development, while the held-out evaluation buildings stay completely unseen.</p>
       </div>
       <div class="prose reveal">
         <p>Each score is reported with a <b>bootstrapped 95% confidence interval</b> that quantifies how much the mean would move under stochastic occupancy and weather. Two policies are treated as significantly different only when their intervals are disjoint, which guards against reading a ranking gap that is within noise.</p>
@@ -57,14 +57,14 @@
     </div>
     <div class="grid grid--3 reveal">
       <div class="tile"><span class="tile__tag"></span>
-        <div class="stat__num" style="font-family:var(--ff-display);font-size:2rem;color:var(--slate)">60</div>
-        <h3 style="margin-top:8px">Development environments</h3>
-        <p>10 public buildings &times; 6 weather scenarios, used to build and validate policies.</p>
+        <div class="stat__num" style="font-family:var(--ff-display);font-size:2rem;color:var(--slate)">48</div>
+        <h3 style="margin-top:8px">Development scenarios</h3>
+        <p>8 public buildings &times; 6 weather stations, used to build and validate policies.</p>
       </div>
       <div class="tile"><span class="tile__tag"></span>
         <div class="stat__num" style="font-family:var(--ff-display);font-size:2rem;color:var(--slate)">180</div>
         <h3 style="margin-top:8px">Evaluation trajectories</h3>
-        <p>10 held-out buildings &times; 6 weather scenarios &times; 3 rollouts, completely unseen during development.</p>
+        <p>10 held-out buildings &times; 6 weather stations &times; 3 rollouts, completely unseen during development.</p>
       </div>
       <div class="tile"><span class="tile__tag"></span>
         <div class="stat__num" style="font-family:var(--ff-display);font-size:2rem;color:var(--slate)">1.0</div>

@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Submission Format | Smart Buildings Competition 2026</title>
-<meta name="description" content="How to submit: a Transfer_policy class conditioned on building metadata.">
+<meta name="description" content="How to submit: a TransferPolicy class conditioned on building metadata.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400..600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -17,7 +17,7 @@
   <div class="wrap">
     <p class="eyebrow">Submission format</p>
     <h1>What you submit</h1>
-    <p class="lede">Submit a <code style="color:var(--cool)">Transfer_policy</code> class, initialized with the building's metadata and action spec. Actions are drawn from it via <code style="color:var(--cool)">get_action</code>.</p>
+    <p class="lede">Submit a <code style="color:var(--cool)">TransferPolicy</code> class, initialized with the building's metadata and action spec. Actions are drawn from it via <code style="color:var(--cool)">get_action</code>.</p>
   </div>
 </section>
 
@@ -25,7 +25,7 @@
   <div class="wrap">
     <div class="reveal" style="max-width:74ch;margin-bottom:26px">
       <p class="eyebrow">The interface</p>
-      <h2>Train a <span style="font-family:var(--ff-mono);font-size:.7em">Transfer_policy</span></h2>
+      <h2>Train a <span style="font-family:var(--ff-mono);font-size:.7em">TransferPolicy</span></h2>
       <div class="prose">
         <p>Your submission is a policy class initialized with <code>building_meta_data</code> and <code>action_spec</code>. At each step, the evaluation harness calls <code>get_action(obs)</code> to obtain the discrete on/off commands and continuous setpoints for the current building. Because the metadata carries the action dimensions, one class handles any building.</p>
       </div>
@@ -41,7 +41,7 @@
 import numpy as np
 
 
-class Transfer_policy:
+class TransferPolicy:
     def __init__(
         self,
         building_meta_data,
@@ -63,7 +63,7 @@ class Transfer_policy:
         }
 </code></pre>
     </div>
-    <p style="font-family:var(--ff-mono);font-size:.8rem;color:var(--text-soft);margin-top:12px;padding-left:14px;border-left:2px solid var(--cool)"><b style="color:var(--text-dim)">Reference policy.</b> A minimal <code>Transfer_policy</code> that reads its action dimensions from the building metadata and returns a zero action. Replace <code>get_action</code> with your learned policy.</p>
+    <p style="font-family:var(--ff-mono);font-size:.8rem;color:var(--text-soft);margin-top:12px;padding-left:14px;border-left:2px solid var(--cool)"><b style="color:var(--text-dim)">Reference policy.</b> A minimal <code>TransferPolicy</code> that reads its action dimensions from the building metadata and returns a zero action. Replace <code>get_action</code> with your learned policy.</p>
   </div>
 </section>
 
@@ -75,7 +75,7 @@ class Transfer_policy:
       <p class="lede">The metadata is what lets a single policy condition its control on the specific building it operates, rather than rely on a fixed input layout.</p>
     </div>
     <div class="grid grid--2 reveal" style="gap:18px">
-      <div class="tile"><span class="tile__tag"></span><h3>Action structure</h3><p>The number of discrete and continuous actions, and the indices of the temperature, pressure, and water setpoints within the continuous action vector.</p></div>
+      <div class="tile"><span class="tile__tag"></span><h3>Action structure</h3><p>The number of discrete and continuous actions, and the indices of the temperature, pressure, recirculation, water, and per-zone (damper and reheat) setpoints within the continuous action vector.</p></div>
       <div class="tile"><span class="tile__tag"></span><h3>Observation structure</h3><p>The observation field names and the indices of the zone temperature sensors.</p></div>
       <div class="tile"><span class="tile__tag"></span><h3>Building layout</h3><p>The floor plan, the zone map, the assignment of zones to AHUs, and the number of floors.</p></div>
       <div class="tile"><span class="tile__tag"></span><h3>Schedule &amp; comfort targets</h3><p>Morning and evening start hours, the comfort window during work hours, the eco window for unoccupied periods, the time zone, and the holiday calendar.</p></div>
