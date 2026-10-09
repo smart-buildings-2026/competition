@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Submission Format | Smart Buildings Competition 2026</title>
-<meta name="description" content="How to submit: a TransferPolicy class conditioned on building metadata.">
+<meta name="description" content="How to submit: a policy class conditioned on building metadata, run by the evaluation gateway.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400..600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -17,7 +17,7 @@
   <div class="wrap">
     <p class="eyebrow">Submission format</p>
     <h1>What you submit</h1>
-    <p class="lede">Submit a <code style="color:var(--cool)">TransferPolicy</code> class, initialized with the building's metadata and action spec. Actions are drawn from it via <code style="color:var(--cool)">get_action</code>.</p>
+    <p class="lede">Submit a notebook holding a <code style="color:var(--cool)">Policy</code> subclass, initialized with the building's metadata and action spec. Actions are drawn from it via <code style="color:var(--cool)">get_action</code>.</p>
   </div>
 </section>
 
@@ -25,9 +25,9 @@
   <div class="wrap">
     <div class="reveal" style="max-width:74ch;margin-bottom:26px">
       <p class="eyebrow">The interface</p>
-      <h2>Train a <span style="font-family:var(--ff-mono);font-size:.7em">TransferPolicy</span></h2>
+      <h2>Write a <span style="font-family:var(--ff-mono);font-size:.7em">Policy</span></h2>
       <div class="prose">
-        <p>Your submission is a policy class initialized with <code>building_meta_data</code> and <code>action_spec</code>. At each step, the evaluation harness calls <code>get_action(obs)</code> to obtain the discrete on/off commands and continuous setpoints for the current building. Because the metadata carries the action dimensions, one class handles any building.</p>
+        <p>Your submission is a Kaggle notebook. In it you subclass the policy base class supplied by the evaluation gateway, and hand your class to the inference server. The class is initialized once per building with <code>building_meta_data</code> and <code>action_spec</code>. At each step the gateway calls <code>get_action(obs)</code> to obtain the discrete on/off commands and continuous setpoints for the current building. Because the metadata carries the action dimensions, one class handles any building. Your notebook contains no scenario list and no rollout loop; the gateway owns the simulator and drives it.</p>
       </div>
     </div>
     <div class="codecard reveal">
@@ -35,35 +35,31 @@
         <span class="codecard__dot" style="background:#f4a94b"></span>
         <span class="codecard__dot" style="background:#45c8ea"></span>
         <span class="codecard__dot" style="background:#7688a3"></span>
-        <span class="codecard__file">transfer_policy.py</span>
+        <span class="codecard__file">submission.ipynb</span>
       </div>
 <pre><code class="language-python">from typing import Dict, Any
 import numpy as np
 
+from kaggle_evaluation import smart_buildings_inference_server
 
-class TransferPolicy:
-    def __init__(
-        self,
-        building_meta_data,
-        action_spec,
-    ):
-        self.metadata = building_meta_data
-        self.action_spec = action_spec
+
+class MyPolicy(smart_buildings_inference_server.Policy):
+    def __init__(self, building_meta_data, action_spec):
+        super().__init__(building_meta_data, action_spec)
         self.n_discrete = building_meta_data["n_discrete_action"]
         self.n_continuous = building_meta_data["n_continuous_action"]
-
-    @property
-    def name(self) -> str:
-        return "transfer"
 
     def get_action(self, obs: np.ndarray) -> Dict[str, Any]:
         return {
             "continuous_action": np.zeros(self.n_continuous, dtype=np.float32),
             "discrete_action": np.zeros(self.n_discrete, dtype=np.int32),
         }
+
+
+smart_buildings_inference_server.SmartBuildingsInferenceServer(MyPolicy).run()
 </code></pre>
     </div>
-    <p style="font-family:var(--ff-mono);font-size:.8rem;color:var(--text-soft);margin-top:12px;padding-left:14px;border-left:2px solid var(--cool)"><b style="color:var(--text-dim)">Reference policy.</b> A minimal <code>TransferPolicy</code> that reads its action dimensions from the building metadata and returns a zero action. Replace <code>get_action</code> with your learned policy.</p>
+    <p style="font-family:var(--ff-mono);font-size:.8rem;color:var(--text-soft);margin-top:12px;padding-left:14px;border-left:2px solid var(--cool)"><b style="color:var(--text-dim)">Reference policy.</b> A minimal policy that reads its action dimensions from the building metadata and returns a zero action. Replace <code>get_action</code> with your learned policy. The class name is yours to choose; only the two signatures are fixed. Full submission instructions and the current template notebook are on the Kaggle competition submission page.</p>
   </div>
 </section>
 

@@ -46,7 +46,7 @@
   </div>
 
   <div class="callout reveal">
-    <p style="margin:0 0 6px"><b>At each control step</b>, a five-minute interval over a 30-day scored episode (after a 5-day warm-up), the policy observes the building state and must simultaneously issue:</p>
+    <p style="margin:0 0 6px"><b>At each control step</b>, a five-minute interval over a 30-day episode of 8,640 steps in which every step is scored, the policy observes the building state and must simultaneously issue:</p>
     <div class="prose"><ul style="margin-bottom:0">
       <li><b>Discrete actions:</b> an on/off command for each Air Handler Unit (AHU) and for the central Hot Water System (HWS), determining which equipment is actively conditioning the building.</li>
       <li><b>Continuous setpoints:</b> for each AHU, the supply-air temperature, duct static pressure, and recirculation fraction; for the HWS, the boiler supply-water temperature and pump differential pressure; and for each zone's VAV box, the damper position and reheat valve position.</li>
