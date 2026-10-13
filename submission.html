@@ -18,6 +18,11 @@
     <p class="eyebrow">Submission format</p>
     <h1>What you submit</h1>
     <p class="lede">Submit a notebook holding a <code style="color:var(--cool)">Policy</code> subclass, initialized with the building's metadata and action spec. Actions are drawn from it via <code style="color:var(--cool)">get_action</code>.</p>
+    <div class="hero__cta" style="margin-top:22px">
+      <a class="btn btn--primary" href="https://www.kaggle.com/competitions/neurips-2026-smart-buildings" target="_blank" rel="noopener">Submit on Kaggle <span class="btn__arrow">&rarr;</span></a>
+      <a class="btn btn--ghost" href="https://github.com/smart-buildings-2026/starter-kit" target="_blank" rel="noopener">Starter kit on GitHub</a>
+      <a class="btn btn--ghost" href="https://openreview.net/group?id=NeurIPS.cc/2026/Workshop/SB26_Challenge" target="_blank" rel="noopener">Submit papers on OpenReview</a>
+    </div>
   </div>
 </section>
 
@@ -27,7 +32,7 @@
       <p class="eyebrow">The interface</p>
       <h2>Write a <span style="font-family:var(--ff-mono);font-size:.7em">Policy</span></h2>
       <div class="prose">
-        <p>Your submission is a Kaggle notebook. In it you subclass the policy base class supplied by the evaluation gateway, and hand your class to the inference server. The class is initialized once per building with <code>building_meta_data</code> and <code>action_spec</code>. At each step the gateway calls <code>get_action(obs)</code> to obtain the discrete on/off commands and continuous setpoints for the current building. Because the metadata carries the action dimensions, one class handles any building. Your notebook contains no scenario list and no rollout loop; the gateway owns the simulator and drives it.</p>
+        <p>Your submission is a Kaggle notebook. In it you subclass the policy base class supplied by the evaluation gateway, and hand your class to the inference server. The class is initialized once per scenario with <code>building_meta_data</code> and <code>action_spec</code>. At each step the gateway calls <code>get_action(obs)</code> to obtain the discrete on/off commands and continuous setpoints for the current building. Because the metadata carries the action dimensions, one class handles any building. Your notebook contains no scenario list and no rollout loop; the gateway owns the simulator and drives it.</p>
       </div>
     </div>
     <div class="codecard reveal">
@@ -43,7 +48,7 @@ import numpy as np
 from kaggle_evaluation import smart_buildings_inference_server
 
 
-class MyPolicy(smart_buildings_inference_server.Policy):
+class TransferPolicy(smart_buildings_inference_server.Policy):
     def __init__(self, building_meta_data, action_spec):
         super().__init__(building_meta_data, action_spec)
         self.n_discrete = building_meta_data["n_discrete_action"]
@@ -56,14 +61,47 @@ class MyPolicy(smart_buildings_inference_server.Policy):
         }
 
 
-smart_buildings_inference_server.SmartBuildingsInferenceServer(MyPolicy).run()
+smart_buildings_inference_server.SmartBuildingsInferenceServer(TransferPolicy).run()
 </code></pre>
     </div>
-    <p style="font-family:var(--ff-mono);font-size:.8rem;color:var(--text-soft);margin-top:12px;padding-left:14px;border-left:2px solid var(--cool)"><b style="color:var(--text-dim)">Reference policy.</b> A minimal policy that reads its action dimensions from the building metadata and returns a zero action. Replace <code>get_action</code> with your learned policy. The class name is yours to choose; only the two signatures are fixed. Full submission instructions and the current template notebook are on the Kaggle competition submission page.</p>
+    <p style="font-family:var(--ff-mono);font-size:.8rem;color:var(--text-soft);margin-top:12px;padding-left:14px;border-left:2px solid var(--cool)"><b style="color:var(--text-dim)">Reference policy.</b> A minimal policy that reads its action dimensions from the building metadata and returns a zero action. Replace <code>get_action</code> with your learned policy. The class is named <code>TransferPolicy</code> to match the starter kit and the starter notebook. A complete, runnable version is the <b style="color:var(--text-dim)">TransferPolicy Notebook</b> on the <a href="https://www.kaggle.com/competitions/neurips-2026-smart-buildings/code" target="_blank" rel="noopener">Kaggle Code tab</a>.</p>
   </div>
 </section>
 
 <section class="section section--paper2">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow">How to submit</p>
+      <h2>From starter notebook to leaderboard</h2>
+      <p class="lede">You upload one notebook to Kaggle. Nothing else is submitted.</p>
+    </div>
+    <ol class="rules reveal">
+      <li><h3>Copy the starter notebook</h3><p>Open the <b>TransferPolicy Notebook</b> on the <a href="https://www.kaggle.com/competitions/neurips-2026-smart-buildings/code" target="_blank" rel="noopener">Kaggle Code tab</a> and copy it. It already imports the gateway and runs end to end.</p></li>
+      <li><h3>Write your policy</h3><p>Replace the logic in <code>get_action</code>. Keep the two signatures, <code>__init__(building_meta_data, action_spec)</code> and <code>get_action(obs)</code>, and keep the subclass of <code>smart_buildings_inference_server.Policy</code>. Load any model weights in <code>__init__</code> from a Kaggle Dataset attached to the notebook.</p></li>
+      <li><h3>Test it in the notebook</h3><p>Running the notebook yourself plays one public example scenario, so you can check that your policy loads and runs. To score against all 30 training scenarios, use <code>evaluate.py</code> and <code>score_leaderboard.py</code> from the <a href="https://github.com/smart-buildings-2026/starter-kit" target="_blank" rel="noopener">starter kit</a>.</p></li>
+      <li><h3>Submit</h3><p>Save a version of the notebook and submit it on the <a href="https://www.kaggle.com/competitions/neurips-2026-smart-buildings" target="_blank" rel="noopener">competition page</a>. Kaggle re-runs the same notebook against the hidden test scenarios. You do not change any code between testing and submitting.</p></li>
+    </ol>
+
+    <div class="callout reveal" style="margin-top:26px">
+      <p style="margin:0 0 6px"><b>Guidelines</b></p>
+      <div class="prose"><ul style="margin-bottom:0">
+        <li>A fresh policy is built for every scenario, so no state carries from one scenario to the next.</li>
+        <li>Time limits: 15 minutes for the first step of each scenario, for loading a model, then 60 seconds per step. The whole submission must finish within one Kaggle session.</li>
+        <li>Return actions inside the action space bounds. Out-of-range actions are rejected.</li>
+        <li>Make sure every action is a finite number. A NaN is not caught by the bounds check and corrupts the rest of the episode.</li>
+        <li>Read action and observation positions from the building metadata. Do not hardcode them.</li>
+        <li>Do not reference held-out configurations or weather. Doing so is disqualifying under the <a href="https://www.kaggle.com/competitions/neurips-2026-smart-buildings/rules" target="_blank" rel="noopener">competition rules</a>.</li>
+      </ul></div>
+    </div>
+
+    <div class="callout reveal" style="margin-top:18px">
+      <p style="margin:0"><b>Paper track.</b> Papers are submitted separately, on OpenReview. The NeurIPS poster round closes November 13, 2026, and the final round closes January 15, 2027.</p>
+      <div style="margin-top:14px"><a class="btn btn--dark" href="https://openreview.net/group?id=NeurIPS.cc/2026/Workshop/SB26_Challenge" target="_blank" rel="noopener">Submit papers on OpenReview <span class="btn__arrow">&rarr;</span></a></div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
   <div class="wrap">
     <div class="section-head reveal">
       <p class="eyebrow">Building metadata</p>
@@ -89,7 +127,11 @@ smart_buildings_inference_server.SmartBuildingsInferenceServer(MyPolicy).run()
   <div class="wrap" style="text-align:center">
     <div class="reveal">
       <h2>Get the starter kit</h2>
-      <p class="lede" style="margin:0 auto">The starter kit, baselines, and unlimited scenario generation will be available on Kaggle.</p>
+      <p class="lede" style="margin:0 auto 22px">The simulator, training scenarios, baselines, building generator, and local scorer are on GitHub. The starter notebook is on Kaggle.</p>
+      <div class="hero__cta" style="justify-content:center">
+        <a class="btn btn--dark" href="https://github.com/smart-buildings-2026/starter-kit" target="_blank" rel="noopener">Starter kit on GitHub <span class="btn__arrow">&rarr;</span></a>
+        <a class="btn btn--primary" href="https://www.kaggle.com/competitions/neurips-2026-smart-buildings/code" target="_blank" rel="noopener">Starter notebook on Kaggle</a>
+      </div>
     </div>
   </div>
 </section>

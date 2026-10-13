@@ -43,6 +43,7 @@
     <p>Participants develop a single control policy that operates the HVAC systems of commercial buildings across a range of layouts and weather conditions. The policy decides when to run each air handler and the hot-water pump, sets their temperature, pressure, and recirculation setpoints, and divides the air between zones, to jointly minimize energy cost and carbon emissions while maintaining occupant comfort.</p>
     <p>The objective is deliberately <em>not</em> to tune a controller for one building. It is to learn one policy that generalizes across arbitrary floor plans, HVAC topologies, and weather. The same policy is deployed, unchanged, on buildings it has never encountered, differing in number of floors, geometry, room layout, zoning, equipment count, and climate. The policy must infer an effective strategy from the building description and live sensor stream it is given at runtime.</p>
     <p>This portability across the entire distribution of buildings, rather than competence on a single instance, is the defining requirement of a building foundation model and the central scientific challenge of the competition.</p>
+    <p>The simulator, the training scenarios, the baseline controllers, the building generator, and a local scorer are in the <a href="https://github.com/smart-buildings-2026/starter-kit" target="_blank" rel="noopener">starter kit on GitHub</a>.</p>
   </div>
 
   <div class="callout reveal">
@@ -128,7 +129,7 @@
         <li>the <b>continuous</b> component has shape <code>(3K+2+2V)</code>: three setpoints per AHU (supply-air temperature, static pressure, recirculation), two for the HWS (supply-water temperature, differential pressure), and two per VAV box (damper, reheat valve), each normalized to \([-1, 1]\).</li>
       </ul>
       <p>An AHU sends one supply-air temperature to all its zones, so the dampers and reheat valves are the only per-zone decisions. The simulator enforces ventilation floors: a running AHU keeps a minimum static pressure, recirculation is capped at 70%, and every damper stays at least 10% open.</p>
-      <p>These shapes vary widely because the generator samples a broad configuration space: 2 to 4 floors; a 400 to 700 ft &times; 300 to 500 ft footprint; composite layouts; 30 to 60 ft rooms; and 1 to 2 occupants per zone. Across the 8 training buildings, K runs from 3 to 9 and V from 28 to 85, so the discrete space spans <b>4 to 10 bits</b> and the continuous space <b>67 to 199 values</b>.</p>
+      <p>These shapes vary widely because the generator samples a broad configuration space: 2 to 4 floors; a 400 to 700 ft &times; 300 to 500 ft footprint; composite layouts; 30 to 60 ft rooms; and 1 to 2 occupants per zone. Across the 6 training buildings, K runs from 3 to 9 and V from 28 to 85, so the discrete space spans <b>4 to 10 bits</b> and the continuous space <b>67 to 199 values</b>.</p>
       <div class="callout" style="margin-top:8px"><p style="margin:0">Training building <code>building_train_1</code> (Figure 2), with 4 AHUs and 39 zones, has a <b>5-bit</b> discrete action and a <b>92-value</b> continuous action. Read the index layout from the building metadata rather than assuming it.</p></div>
     </div>
   </div>

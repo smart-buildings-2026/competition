@@ -542,7 +542,7 @@ table.lb tbody tr:hover { background: var(--paper); }
 @media (max-width: 720px) {
   .grid--2, .grid--3, .grid--4, .parts, .people, .ack, .footer-grid { grid-template-columns: 1fr; }
   .section { padding: 60px 0; }
-  .hero__cta .btn { flex: 1; justify-content: center; }
+  .hero__cta .btn { flex: 1 1 auto; justify-content: center; }
 }
 
 @media (prefers-reduced-motion: reduce) {

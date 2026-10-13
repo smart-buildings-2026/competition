@@ -15,7 +15,6 @@
   var PAGES = [
     { href: "index.html",       label: "About" },
     { href: "competition.html", label: "Competition" },
-    { href: "rules.html",       label: "Rules" },
     { href: "submission.html",  label: "Submission" },
     { href: "scoring.html",     label: "Scoring" },
     { href: "organizers.html",  label: "Organizers" }
