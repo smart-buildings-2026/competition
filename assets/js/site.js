@@ -64,6 +64,8 @@
       '<div class="footer-sponsor">' +
         '<span class="footer-sponsor__label">Sponsored by</span>' +
         '<a class="sponsor-chip" href="https://www.kajima.co.jp/english/" target="_blank" rel="noopener"><img src="assets/images/kajima.png" alt="Kajima Corporation"></a>' +
+        '<a class="sponsor-chip" href="https://www.distyl.ai/" target="_blank" rel="noopener"><img src="assets/images/distyl-logo.png" alt="Distyl AI"></a>' +
+        '<a class="sponsor-chip" href="https://kodelabs.com/" target="_blank" rel="noopener"><img src="assets/images/kodelabs-logo.png" alt="KODE Labs"></a>' +
       "</div>" +
       '<hr class="spectrum-rule" style="opacity:.5;margin-bottom:22px">' +
       '<div class="footer-bar">' +

@@ -479,6 +479,12 @@ table.lb tbody tr:hover { background: var(--paper); }
 .ack__amt .u { color: var(--cool); font-size: 1rem; }
 .ack__by { font-family: var(--ff-mono); font-size: .78rem; color: var(--on-dark-dim); margin-top: 6px; letter-spacing: .05em; }
 
+/* Sponsor logos inside the prize card */
+.ack__logos { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 14px; }
+.ack__logos .sponsor-chip { padding: 9px 15px; }
+.ack__logos .sponsor-chip img { height: 24px; }
+@media (max-width: 520px) { .ack__logos .sponsor-chip img { height: 20px; } }
+
 /* ---------- Footer ---------- */
 .site-footer { background: var(--ink); color: var(--on-dark-dim); padding: 54px 0 30px; }
 .footer-grid { display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: 34px; margin-bottom: 34px; }
