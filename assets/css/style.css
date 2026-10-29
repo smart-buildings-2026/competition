@@ -556,3 +556,9 @@ table.lb tbody tr:hover { background: var(--paper); }
   .reveal { opacity: 1; transform: none; transition: none; }
   * { animation: none !important; }
 }
+
+/* ---------- Careers (Distyl AI) ---------- */
+.careers { display: flex; align-items: center; gap: 22px; flex-wrap: wrap; }
+.careers .sponsor-chip--qr { padding: 6px; box-shadow: var(--shadow-sm); border: 1px solid var(--line); }
+.careers .sponsor-chip--qr img { height: 120px; }
+.careers__text { max-width: 52ch; }
